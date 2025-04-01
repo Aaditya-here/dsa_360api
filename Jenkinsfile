@@ -47,7 +47,7 @@ pipeline {
 
                     PREVIOUS_IMAGE = ''
                     existingImages.split('\n').each { img ->
-                        if (img.contains("ram2715/dsa360-")) {
+                        if (img.contains("aadi0830/dsa360-")) {
                             PREVIOUS_IMAGE = img.trim()
                             echo "Found previous image: ${PREVIOUS_IMAGE}"
                         }
@@ -89,7 +89,7 @@ pipeline {
                 script {
                     echo "Pushing Docker image to DockerHub..."
                     withCredentials([string(credentialsId: 'dockertoken', variable: 'dockertoken')]) {
-                        bat "docker login -u ram2715 -p ${dockertoken}"
+                        bat "docker login -u adityapatil08 -p ${dockertoken}"
                         bat "docker push ${env.DOCKER_IMAGE_NAME}"
                         echo "Docker image pushed successfully!"
                     }
@@ -107,11 +107,45 @@ pipeline {
     }
 
     post {
-        success {
-            echo '✅ Pipeline succeeded! Docker image pushed and cleaned up successfully.'
-        }
-        failure {
-            echo '❌ Pipeline failed! Check logs for details.'
+    success {
+        script {
+            echo '✅ Pipeline succeeded! Sending success email...'
+            emailext (
+                to: 'recipient@example.com',  // Replace with your email
+                subject: "✅ Jenkins Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Jenkins Build Successful 🎉</h2>
+                    <p><strong>Project:</strong> ${env.JOB_NAME}</p>
+                    <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
+                    <p><strong>Docker Image Pushed:</strong> ${env.DOCKER_IMAGE_NAME}</p>
+                    <p>Check the full logs in the attachment.</p>
+                    <p><a href="${env.BUILD_URL}console">View Console Logs</a></p>
+                """,
+                attachLog: true,
+                mimeType: 'text/html'
+            )
         }
     }
+    
+    failure {
+        script {
+            echo '❌ Pipeline failed! Sending failure email...'
+            emailext (
+                to: 'recipient@example.com',  // Replace with your email
+                subject: "❌ Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Jenkins Build Failed ❌</h2>
+                    <p><strong>Project:</strong> ${env.JOB_NAME}</p>
+                    <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
+                    <p><strong>Failed Stage:</strong> ${currentBuild.currentResult}</p>
+                    <p>Check the attached logs for details.</p>
+                    <p><a href="${env.BUILD_URL}console">View Console Logs</a></p>
+                """,
+                attachLog: true,
+                mimeType: 'text/html'
+            )
+        }
+    }
+}
+
 }
