@@ -111,7 +111,7 @@ pipeline {
         script {
             echo '✅ Pipeline succeeded! Sending success email...'
             emailext (
-                to: 'recipient@example.com',  // Replace with your email
+                to: 'aadityapatilpush@gmail.com',  // Replace with your email
                 subject: "✅ Jenkins Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                     <h2>Jenkins Build Successful 🎉</h2>
@@ -131,7 +131,7 @@ pipeline {
         script {
             echo '❌ Pipeline failed! Sending failure email...'
             emailext (
-                to: 'recipient@example.com',  // Replace with your email
+                to: 'aadityapatilpush@gmail.com',  // Replace with your email
                 subject: "❌ Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                     <h2>Jenkins Build Failed ❌</h2>
