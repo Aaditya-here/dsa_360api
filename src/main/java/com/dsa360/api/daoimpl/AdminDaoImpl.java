@@ -241,7 +241,7 @@ public class AdminDaoImpl implements AdminDao {
 		RegionsEntity regionsEntity = null;
 		try (Session session = factory.openSession()) {
 			regionsEntity = (RegionsEntity) session.createCriteria(RegionsEntity.class)
-					.add(Restrictions.eq("regionCode", regionName)).uniqueResult();
+					.add(Restrictions.eq("regionName", regionName)).uniqueResult();
 
 		} catch (Exception e) {
 			logger.error("Exception occurred during retrive region by name :{}", e);

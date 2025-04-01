@@ -53,6 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			authToken = header.replace(JwtConstant.TOKEN_PREFIX.getValue(), "");
 			
 			System.out.println(authToken);
+			
 			try {
 				username = jwtTokenUtil.getUsernameFromToken(authToken);
 

@@ -38,7 +38,7 @@ public class AgentController {
 	public ResponseEntity<String> createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
 		String customerId = service.createCustomer(customerDTO);
 
-		return new ResponseEntity<>(customerId, HttpStatus.OK);
+		return new ResponseEntity<>("Customer ID = "+customerId, HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ROLE_AGENT')")
@@ -46,7 +46,7 @@ public class AgentController {
 	public ResponseEntity<String> customerLoanApplication(@Valid @RequestBody LoanApplicationDTO loanApplicationDTO) {
 		String loadApplicationId = service.customerLoanApplication(loanApplicationDTO);
 
-		return new ResponseEntity<>(loadApplicationId,HttpStatus.OK);
+		return new ResponseEntity<>("New Loan Application Id = "+loadApplicationId,HttpStatus.OK);
 	}
 
 	

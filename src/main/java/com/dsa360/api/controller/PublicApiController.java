@@ -59,24 +59,24 @@ public class PublicApiController {
 			@RequestParam String dsaApplicationId, @RequestParam String bankName, @RequestParam String accountNumber,
 			@RequestParam String ifscCode) {
 
-		DsaKycDto dsa_KYC_DTO = new DsaKycDto();
+		DsaKycDto dsaKYCDTO = new DsaKycDto();
 
 		String message = null;
 
-		dsa_KYC_DTO.setDsaApplicationId(dsaApplicationId);
-		dsa_KYC_DTO.setBankName(bankName);
-		dsa_KYC_DTO.setAccountNumber(accountNumber);
-		dsa_KYC_DTO.setIfscCode(ifscCode);
+		dsaKYCDTO.setDsaApplicationId(dsaApplicationId);
+		dsaKYCDTO.setBankName(bankName);
+		dsaKYCDTO.setAccountNumber(accountNumber);
+		dsaKYCDTO.setIfscCode(ifscCode);
 
-		dsa_KYC_DTO.setPassportFile(passport);
-		dsa_KYC_DTO.setDrivingLicenceFile(drivingLicence);
-		dsa_KYC_DTO.setAadharCardFile(aadharCard);
-		dsa_KYC_DTO.setPanCardFile(panCard);
-		dsa_KYC_DTO.setPhotographFile(photograph);
-		dsa_KYC_DTO.setAddressProofFile(addressProof);
-		dsa_KYC_DTO.setBankPassbookFile(bankPassbook);
+		dsaKYCDTO.setPassportFile(passport);
+		dsaKYCDTO.setDrivingLicenceFile(drivingLicence);
+		dsaKYCDTO.setAadharCardFile(aadharCard);
+		dsaKYCDTO.setPanCardFile(panCard);
+		dsaKYCDTO.setPhotographFile(photograph);
+		dsaKYCDTO.setAddressProofFile(addressProof);
+		dsaKYCDTO.setBankPassbookFile(bankPassbook);
 
-		message = dsaService.systemUserKyc(dsa_KYC_DTO);
+		message = dsaService.systemUserKyc(dsaKYCDTO);
 
 		return new ResponseEntity<>(message, HttpStatus.CREATED);
 
