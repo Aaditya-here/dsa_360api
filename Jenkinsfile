@@ -121,8 +121,8 @@ pipeline {
                     <p><a href="${env.BUILD_URL}console">🔗 View Console Logs</a></p>
                 """,
                 to: 'aadityapatilpush@gmail.com',  
-                from: 'your-email@gmail.com',  // Set your configured email
-                replyTo: 'your-email@gmail.com',
+                from: 'aadityapatilpush@gmail.com',  // Set your configured email
+                replyTo: 'aadityapatilpush@gmail.com',
                 attachLog: true,
                 mimeType: 'text/html'
             )
@@ -143,8 +143,8 @@ pipeline {
                     <p><a href="${env.BUILD_URL}console">🔗 View Console Logs</a></p>
                 """,
                 to: 'aadityapatilpush@gmail.com',  
-                from: 'your-email@gmail.com',  
-                replyTo: 'your-email@gmail.com',
+                from: 'aadityapatilpush@gmail.com',  
+                replyTo: 'aadityapatilpush@gmail.com',
                 attachLog: true,
                 mimeType: 'text/html'
             )
