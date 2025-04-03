@@ -117,7 +117,7 @@ pipeline {
                 bat "copy \"${logFileSource}\" \"${logFileDestination}\""
 
                 emailext (
-                    to: 'salikramchadar@gmail.com',
+                    to: 'aadityapatilpush@gmail.com',
                     subject: "✅ SUCCESS: DSA360 Pipeline - Build #${env.BUILD_NUMBER}",
                     body: """
                         <h3>Jenkins Build Success</h3>
@@ -145,7 +145,7 @@ pipeline {
                 bat "copy \"${logFileSource}\" \"${logFileDestination}\""
 
                 emailext (
-                    to: 'salikramchadar@gmail.com',
+                    to: 'aadityapatilpush@gmail.com',
                     subject: "❌ FAILURE: DSA360 Pipeline - Build #${env.BUILD_NUMBER}",
                     body: """
                         <h3>Jenkins Build Failure</h3>
