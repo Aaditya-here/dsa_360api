@@ -111,41 +111,47 @@ pipeline {
         script {
             echo '✅ Pipeline succeeded! Sending success email...'
             emailext (
-                to: 'aadityapatilpush@gmail.com',  // Replace with your email
                 subject: "✅ Jenkins Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
-                    <h2>Jenkins Build Successful 🎉</h2>
+                    <h2>🎉 Jenkins Build Successful</h2>
                     <p><strong>Project:</strong> ${env.JOB_NAME}</p>
                     <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
                     <p><strong>Docker Image Pushed:</strong> ${env.DOCKER_IMAGE_NAME}</p>
                     <p>Check the full logs in the attachment.</p>
-                    <p><a href="${env.BUILD_URL}console">View Console Logs</a></p>
+                    <p><a href="${env.BUILD_URL}console">🔗 View Console Logs</a></p>
                 """,
+                to: 'aadityapatilpush@gmail.com',  
+                from: 'your-email@gmail.com',  // Set your configured email
+                replyTo: 'your-email@gmail.com',
                 attachLog: true,
                 mimeType: 'text/html'
             )
         }
     }
-    
+
     failure {
         script {
             echo '❌ Pipeline failed! Sending failure email...'
             emailext (
-                to: 'aadityapatilpush@gmail.com',  // Replace with your email
                 subject: "❌ Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
-                    <h2>Jenkins Build Failed ❌</h2>
+                    <h2>❌ Jenkins Build Failed</h2>
                     <p><strong>Project:</strong> ${env.JOB_NAME}</p>
                     <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
                     <p><strong>Failed Stage:</strong> ${currentBuild.currentResult}</p>
                     <p>Check the attached logs for details.</p>
-                    <p><a href="${env.BUILD_URL}console">View Console Logs</a></p>
+                    <p><a href="${env.BUILD_URL}console">🔗 View Console Logs</a></p>
                 """,
+                to: 'aadityapatilpush@gmail.com',  
+                from: 'your-email@gmail.com',  
+                replyTo: 'your-email@gmail.com',
                 attachLog: true,
                 mimeType: 'text/html'
             )
         }
     }
+}
+
 }
 
 }
