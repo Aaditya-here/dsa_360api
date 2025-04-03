@@ -42,7 +42,6 @@ pipeline {
                 script {
                     echo "Searching for previous Docker image..."
 
-                    // List all Docker images and filter programmatically
                     def existingImages = bat(script: 'docker images --format "{{.Repository}}:{{.Tag}}"', returnStdout: true).trim()
 
                     PREVIOUS_IMAGE = ''
@@ -107,51 +106,60 @@ pipeline {
     }
 
     post {
-    success {
-        script {
-            echo '✅ Pipeline succeeded! Sending success email...'
-            emailext (
-                subject: "✅ Jenkins Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-                    <h2>🎉 Jenkins Build Successful</h2>
-                    <p><strong>Project:</strong> ${env.JOB_NAME}</p>
-                    <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
-                    <p><strong>Docker Image Pushed:</strong> ${env.DOCKER_IMAGE_NAME}</p>
-                    <p>Check the full logs in the attachment.</p>
-                    <p><a href="${env.BUILD_URL}console">🔗 View Console Logs</a></p>
-                """,
-                to: 'aadityapatilpush@gmail.com',  
-                from: 'aadityapatilpush@gmail.com',  // Set your configured email
-                replyTo: 'aadityapatilpush@gmail.com',
-                attachLog: true,
-                mimeType: 'text/html'
-            )
-        }
-    }
+        success {
+            echo '✅ Pipeline succeeded! Docker image pushed and cleaned up successfully.'
 
-    failure {
-        script {
-            echo '❌ Pipeline failed! Sending failure email...'
-            emailext (
-                subject: "❌ Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-                    <h2>❌ Jenkins Build Failed</h2>
-                    <p><strong>Project:</strong> ${env.JOB_NAME}</p>
-                    <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
-                    <p><strong>Failed Stage:</strong> ${currentBuild.currentResult}</p>
-                    <p>Check the attached logs for details.</p>
-                    <p><a href="${env.BUILD_URL}console">🔗 View Console Logs</a></p>
-                """,
-                to: 'aadityapatilpush@gmail.com',  
-                from: 'aadityapatilpush@gmail.com',  
-                replyTo: 'aadityapatilpush@gmail.com',
-                attachLog: true,
-                mimeType: 'text/html'
-            )
+            script {
+                def logFileSource = "C:\\ProgramData\\Jenkins\\.jenkins\\jobs\\${env.JOB_NAME}\\builds\\${env.BUILD_NUMBER}\\log"
+                def logFileDestination = "${WORKSPACE}\\build-log-${env.BUILD_NUMBER}.txt"
+
+                echo "Copying Jenkins console log file..."
+                bat "copy \"${logFileSource}\" \"${logFileDestination}\""
+
+                emailext (
+                    to: 'salikramchadar@gmail.com',
+                    subject: "✅ SUCCESS: DSA360 Pipeline - Build #${env.BUILD_NUMBER}",
+                    body: """
+                        <h3>Jenkins Build Success</h3>
+                        <p><strong>Project:</strong> ${env.JOB_NAME}</p>
+                        <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
+                        <p><strong>Status:</strong> ✅ SUCCESS</p>
+                        <p><strong>Docker Image:</strong> ${env.DOCKER_IMAGE_NAME}</p>
+                        <p><strong>View Build:</strong> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                    """,
+                    attachLog: true,
+                    attachmentsPattern: "build-log-${env.BUILD_NUMBER}.txt",
+                    mimeType: 'text/html'
+                )
+            }
+        }
+
+        failure {
+            echo '❌ Pipeline failed! Check logs for details.'
+
+            script {
+                def logFileSource = "C:\\ProgramData\\Jenkins\\.jenkins\\jobs\\${env.JOB_NAME}\\builds\\${env.BUILD_NUMBER}\\log"
+                def logFileDestination = "${WORKSPACE}\\build-log-${env.BUILD_NUMBER}.txt"
+
+                echo "Copying Jenkins console log file..."
+                bat "copy \"${logFileSource}\" \"${logFileDestination}\""
+
+                emailext (
+                    to: 'salikramchadar@gmail.com',
+                    subject: "❌ FAILURE: DSA360 Pipeline - Build #${env.BUILD_NUMBER}",
+                    body: """
+                        <h3>Jenkins Build Failure</h3>
+                        <p><strong>Project:</strong> ${env.JOB_NAME}</p>
+                        <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
+                        <p><strong>Status:</strong> ❌ FAILED</p>
+                        <p><strong>View Build:</strong> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                        <p>Please check the attached log for details.</p>
+                    """,
+                    attachLog: true,
+                    attachmentsPattern: "build-log-${env.BUILD_NUMBER}.txt",
+                    mimeType: 'text/html'
+                )
+            }
         }
     }
 }
-
-}
-
-
